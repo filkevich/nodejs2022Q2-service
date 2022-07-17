@@ -12,16 +12,16 @@ import {
 import { ParseUUIDPipe } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { IArtist, TArtistId } from './artist.model';
-import CreateUserDto from './dtos/createArtist.dto';
-import UpdatePasswordDto from './dtos/updateArtist.dto';
+import CreateArtistDto from './dtos/createArtist.dto';
+import UpdateArtistDto from './dtos/updateArtist.dto';
 
 @Controller('artist')
 export class ArtistController {
-  constructor(private readonly userService: ArtistService) {}
+  constructor(private readonly artistService: ArtistService) {}
 
   @Get()
   findAll(): IArtist[] {
-    return this.userService.findAll();
+    return this.artistService.findAll();
   }
 
   @Get(':id')
@@ -29,25 +29,25 @@ export class ArtistController {
     @Param('id', new ParseUUIDPipe({ version: '4' }))
     id: TArtistId,
   ): IArtist {
-    return this.userService.findOne(id);
+    return this.artistService.findOne(id);
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): IArtist {
-    return this.userService.create(createUserDto);
+  create(@Body() createArtistDto: CreateArtistDto): IArtist {
+    return this.artistService.create(createArtistDto);
   }
 
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: TArtistId,
-    @Body() updateUserDto: UpdatePasswordDto,
+    @Body() updateArtistDto: UpdateArtistDto,
   ): IArtist {
-    return this.userService.update(id, updateUserDto);
+    return this.artistService.update(id, updateArtistDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: TArtistId) {
-    return this.userService.delete(id);
+    return this.artistService.delete(id);
   }
 }

@@ -3,7 +3,7 @@ import IDatabase from './db.model';
 const database: IDatabase = {
   users: [],
   artists: [],
-  // tracks: [],
+  tracks: [],
   // albums: [],
   // favourites: {
   //   tracks: [],
