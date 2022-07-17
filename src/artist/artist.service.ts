@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IArtist, TArtistId } from './artist.model';
 import database from 'src/db/db.service';
 import { v4 as uuid } from 'uuid';
@@ -49,6 +54,10 @@ export class ArtistService {
 
   update(id: TArtistId, updateArtist: UpdateArtistDto): IArtist {
     const artist = database.artists.find((item: IArtist) => item.id === id);
+
+    if (!artist) {
+      throw new HttpException('There is no such Artist', HttpStatus.NOT_FOUND);
+    }
 
     const { name, grammy } = updateArtist;
 

@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ITrack, TTrackId } from './track.model';
 import database from 'src/db/db.service';
 import { v4 as uuid } from 'uuid';
@@ -49,6 +54,11 @@ export class TrackService {
 
   update(id: TTrackId, updateTrack: UpdateTrackDto): ITrack {
     const track = database.tracks.find((item: ITrack) => item.id === id);
+
+    if (!track) {
+      throw new HttpException('There is no such Track', HttpStatus.NOT_FOUND);
+    }
+
     const { name, albumId, artistId, duration } = updateTrack;
 
     track.name = name || track.name;

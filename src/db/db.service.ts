@@ -4,7 +4,7 @@ const database: IDatabase = {
   users: [],
   artists: [],
   tracks: [],
-  // albums: [],
+  albums: [],
   // favourites: {
   //   tracks: [],
   //   artists: [],

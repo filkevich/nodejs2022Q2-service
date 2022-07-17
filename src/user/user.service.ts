@@ -57,7 +57,7 @@ export class UserService {
     const user = database.users.find((item: IUser) => item.id === id);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('There is no such User');
     }
 
     const { newPassword, oldPassword } = updatePasswordDto;
