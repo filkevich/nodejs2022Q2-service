@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IAlbum, TAlbumId } from 'src/album/album.model';
 import { IArtist, TArtistId } from 'src/artist/artist.model';
 import { ITrack, TTrackId } from 'src/track/track.model';
