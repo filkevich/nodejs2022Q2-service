@@ -1,7 +1,15 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { UserService } from './user.service';
-import { IUser, TId } from './user.model';
+import { IUser, TUserId } from './user.model';
 import CreateUserDto from './dtos/createUser.dto';
 
 @Controller('user')
@@ -14,12 +22,18 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: TId) {
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: TUserId) {
     return this.userService.findOne(id);
   }
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: TUserId) {
+    return this.userService.delete(id);
   }
 }

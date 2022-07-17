@@ -1,7 +1,7 @@
-export type TId = string;
+export type TUserId = string;
 
 export interface IUser {
-  id: TId;
+  id: TUserId;
   login: string;
   password?: string;
   version: number;
