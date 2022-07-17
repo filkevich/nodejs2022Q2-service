@@ -1,8 +1,4 @@
-import { IUser } from 'src/user/user.model';
-
-interface IDatabase {
-  users: IUser[];
-}
+import IDatabase from './db.model';
 
 const database: IDatabase = {
   users: [],
