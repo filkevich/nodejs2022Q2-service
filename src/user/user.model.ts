@@ -1,5 +1,7 @@
+export type TId = string;
+
 export interface IUser {
-  id: string;
+  id: TId;
   login: string;
   password?: string;
   version: number;
