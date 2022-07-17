@@ -5,11 +5,11 @@ const database: IDatabase = {
   artists: [],
   tracks: [],
   albums: [],
-  // favourites: {
-  //   tracks: [],
-  //   artists: [],
-  //   albums: [],
-  // },
+  favorites: {
+    tracks: [],
+    artists: [],
+    albums: [],
+  },
 };
 
 export default database;
