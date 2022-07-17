@@ -48,6 +48,8 @@ export class UserService {
       throw new NotFoundException(`User with id: ${id} not found`);
     }
 
+    database.users = newUsersArr;
+
     return `User with id: ${id} was deleted!`;
   }
 
