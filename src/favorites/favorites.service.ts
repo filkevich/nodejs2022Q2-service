@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IAlbum, TAlbumId } from 'src/album/album.model';
 import { IArtist, TArtistId } from 'src/artist/artist.model';
 import { ITrack, TTrackId } from 'src/track/track.model';
@@ -45,7 +45,10 @@ export class FavoriteService {
   addTrack(id: TTrackId) {
     const track = database.tracks.find((item: ITrack) => item.id === id);
     if (!track) {
-      throw new NotFoundException(`Track with id: ${id} not found`);
+      throw new HttpException(
+        `Track with id: ${id} not found`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     database.favorites.tracks.push(id);
@@ -55,7 +58,10 @@ export class FavoriteService {
   addArtist(id: TArtistId) {
     const artist = database.artists.find((item: IArtist) => item.id === id);
     if (!artist) {
-      throw new NotFoundException(`Artist with id: ${id} not found`);
+      throw new HttpException(
+        `Artist with id: ${id} not found`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     database.favorites.artists.push(id);
@@ -65,7 +71,10 @@ export class FavoriteService {
   addAlbum(id: TAlbumId) {
     const album = database.albums.find((item: IAlbum) => item.id === id);
     if (!album) {
-      throw new NotFoundException(`Album with id: ${id} not found`);
+      throw new HttpException(
+        `Album with id: ${id} not found`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     database.favorites.albums.push(id);
@@ -73,41 +82,62 @@ export class FavoriteService {
   }
 
   deleteTrack(id: TTrackId) {
-    const track = database.tracks.find((item: ITrack) => item.id === id);
-    if (!track) {
-      throw new NotFoundException(`Track with id: ${id} not found`);
+    const trackIndex = database.favorites.tracks.findIndex(
+      (track) => track === id,
+    );
+
+    if (trackIndex === -1) {
+      throw new HttpException(
+        `Track with id: ${id} not found`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
-    database.favorites.tracks = database.favorites.tracks.filter(
-      (item) => item !== track.id,
-    );
+    database.favorites.tracks = [
+      ...database.favorites.tracks.slice(0, trackIndex),
+      ...database.favorites.tracks.slice(trackIndex + 1),
+    ];
 
     return `Track with id: ${id} was deleted from favorites`;
   }
 
   deleteArtist(id: TArtistId) {
-    const artist = database.artists.find((item: IArtist) => item.id === id);
-    if (!artist) {
-      throw new NotFoundException(`Artist with id: ${id} not found`);
+    const artistIndex = database.favorites.artists.findIndex(
+      (artist) => artist === id,
+    );
+
+    if (artistIndex === -1) {
+      throw new HttpException(
+        `Artist with id: ${id} not found`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
-    database.favorites.artists = database.favorites.artists.filter(
-      (item) => item !== artist.id,
-    );
+    database.favorites.artists = [
+      ...database.favorites.artists.slice(0, artistIndex),
+      ...database.favorites.artists.slice(artistIndex + 1),
+    ];
 
     return `Artist with id: ${id} was deleted from favorites`;
   }
 
   deleteAlbum(id: TAlbumId) {
-    const album = database.albums.find((item: IAlbum) => item.id === id);
-    if (!album) {
-      throw new NotFoundException(`Album with id: ${id} not found`);
-    }
-
-    database.favorites.albums = database.favorites.albums.filter(
-      (item) => item !== album.id,
+    const albumIndex = database.favorites.albums.findIndex(
+      (album) => album === id,
     );
 
-    return `Album with id: ${id} was deleted from favorites`;
+    if (albumIndex === -1) {
+      throw new HttpException(
+        `Album with id: ${id} not found`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    database.favorites.albums = [
+      ...database.favorites.albums.slice(0, albumIndex),
+      ...database.favorites.albums.slice(albumIndex + 1),
+    ];
+
+    return `Artist with id: ${id} was deleted from favorites`;
   }
 }

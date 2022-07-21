@@ -9,9 +9,17 @@ import database from 'src/db/db.service';
 import { v4 as uuid } from 'uuid';
 import CreateAlbumDto from './dtos/createAlbum.dto';
 import UpdateAlbumDto from './dtos/updateAlbum.dto';
+import { TArtistId } from 'src/artist/artist.model';
+import { TrackService } from 'src/track/track.service';
+import { FavoriteService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class AlbumService {
+  constructor(
+    private readonly trackService: TrackService,
+    private readonly favoriteService: FavoriteService,
+  ) {}
+
   findAll(): IAlbum[] {
     return database.albums;
   }
@@ -19,7 +27,7 @@ export class AlbumService {
   findOne(id: TAlbumId): IAlbum {
     const album = database.albums.find((item: IAlbum) => item.id === id);
     if (!album) {
-      throw new NotFoundException(`Album with id: ${id} not found`);
+      throw new HttpException('There is no such Album', HttpStatus.NOT_FOUND);
     }
     return album;
   }
@@ -44,12 +52,27 @@ export class AlbumService {
       !database.albums.length ||
       newAlbumsArr.length === database.albums.length
     ) {
-      throw new NotFoundException(`Album with id: ${id} not found`);
+      throw new HttpException('There is no such Album', HttpStatus.NOT_FOUND);
     }
 
     database.albums = newAlbumsArr;
+    this.trackService.clearAlbum(id);
+    // this.favoriteService.deleteAlbum(id);
 
     return `Album with id: ${id} was deleted!`;
+  }
+
+  clearArtist(id: TArtistId): string {
+    const updatedAlbumsArr = database.albums.map((item: IAlbum) => {
+      if (item.artistId === id) {
+        return { ...item, artistId: null };
+      }
+      return item;
+    });
+
+    database.albums = updatedAlbumsArr;
+
+    return `Albums that have included Artist with id: ${id} were updated`;
   }
 
   update(id: TAlbumId, updateAlbum: UpdateAlbumDto): IAlbum {

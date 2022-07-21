@@ -35,7 +35,9 @@ export class UserService {
 
     database.users.push(newUser);
 
-    return { ...newUser, password: '********' };
+    const { createdAt, id, login, updatedAt, version } = newUser;
+
+    return { createdAt, id, login, updatedAt, version };
   }
 
   delete(id: TUserId): string {
@@ -53,8 +55,8 @@ export class UserService {
     return `User with id: ${id} was deleted!`;
   }
 
-  update(id: TUserId, updatePasswordDto: UpdatePasswordDto): IUser {
-    const user = database.users.find((item: IUser) => item.id === id);
+  update(userId: TUserId, updatePasswordDto: UpdatePasswordDto): IUser {
+    const user = database.users.find((item: IUser) => item.id === userId);
 
     if (!user) {
       throw new NotFoundException('There is no such User');
@@ -70,6 +72,8 @@ export class UserService {
     user.version += 1;
     user.updatedAt = Date.now();
 
-    return { ...user, password: '********' };
+    const { createdAt, id, login, updatedAt, version } = user;
+
+    return { createdAt, id, login, updatedAt, version };
   }
 }
